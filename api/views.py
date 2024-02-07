@@ -24,6 +24,9 @@ from pydub import AudioSegment
 from os.path import basename
 from django.core.files import File
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 @api_view(['POST','GET'])
 def upload_audio(request):
     try:
@@ -213,3 +216,29 @@ def base64_to_audio(base64_string, output_file=None):
     if output_file:
         with open(output_file, "wb") as f:
             f.write(audio_data)
+
+def receive_fcm_token(request):
+    if request.method == 'POST':
+        fcm_token = request.POST.get('fcm_token')
+        
+        # Do something with the FCM token, such as storing it in the database
+        # You can associate the FCM token with a user or device as needed
+
+        return JsonResponse({'message': 'FCM token received successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+    
+def send_fcm_notification(self, user):
+        try:
+            # Replace 'your_server_key' with your Firebase Cloud Messaging server key
+            server_key = 'your_server_key'
+
+            # Get the user's FCM devices
+            devices = FCMDevice.objects.filter(user=user)
+
+            # Send a notification to each device
+            for device in devices:
+                device.send_message(title='Login Alert', body='Someone is trying to log in to your account.')
+
+        except Exception as e:
+            print("Error sending FCM notification:", e)

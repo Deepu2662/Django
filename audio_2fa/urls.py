@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from api.views import obtain_auth_token_new, upload_audio,check_audio
+from api.views import obtain_auth_token_new, upload_audio,check_audio,receive_fcm_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/',obtain_auth_token_new,name='obtain_auth_token_new'),
     path('api/upload/',upload_audio,),
-    path('api/check/',check_audio,)
+    path('api/check/',check_audio,),
+    path('receive-fcm-token/', receive_fcm_token, name='receive_fcm_token')
 ]
